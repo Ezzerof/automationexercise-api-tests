@@ -68,5 +68,4 @@ public class BrandListTest {
     void testTheContentType() {
         assertThat(response.getHeaders().get("content-type").toString(), equalTo(contentType));
     }
-
 }

@@ -27,6 +27,7 @@ public class ProductListTest {
                 .get(URL)
                 .then()
                 .extract().response();
+        actualStatusCode = response.getStatusCode();
     }
 
     @TestTemplate
@@ -50,7 +51,6 @@ public class ProductListTest {
     @Test
     @DisplayName("Test Status Code: " + expectedStatusCode)
     void testStatusCode() {
-        actualStatusCode = response.getStatusCode();
         assertThat(actualStatusCode, equalTo(expectedStatusCode));
     }
 

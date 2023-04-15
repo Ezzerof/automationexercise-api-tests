@@ -15,10 +15,12 @@ public class UserAccountByEmailTest {
     public final static int expectedStatusCode = 200; // Entered by tester
     public final static String serverName = "cloudflare"; // Entered by tester
     static String emailAddress = "ezzerof9999@gmail.com"; // Entered by tester
+    static String wrongEmailAddress = "thisEmailNotExists@gmail.uk"; // Entered by tester
     final static String contentType = "Content-Type=text/html; charset=utf-8";
     final static String BASE_URL = "https://automationexercise.com/api";
     final static String queryParam = "email";
     static Response response;
+    static Response response1;
     static int actualStatusCode = 0;
 
     @BeforeAll
@@ -61,12 +63,6 @@ public class UserAccountByEmailTest {
 //            System.out.println("AssertionError: " + e.getMessage());
 //        }
     }
-    
-    @Test
-    @DisplayName("Test Response for an invalid email")
-    void testResponseForAnInvalidEmail() {
-        emailAddress = "thisEmailNotExists@gmail.uk";
-    }
 
     @Test
     @DisplayName("Test Status Code: " + expectedStatusCode)
@@ -85,5 +81,29 @@ public class UserAccountByEmailTest {
     @DisplayName("Test the content-type")
     void testTheContentType() {
         assertThat(response.getHeaders().get("content-type").toString(), equalTo(contentType));
+    }
+
+    @BeforeAll
+    void setUp() {
+        RestAssured.baseURI = BASE_URL;
+        response1 = given()
+                .queryParam(queryParam, wrongEmailAddress)
+                .when()
+                .get("/getUserDetailByEmail")
+                .then()
+                .statusCode(expectedStatusCode)
+                .extract().response();
+    }
+
+    @Test
+    @DisplayName("Test response code for an invalid email 404")
+    void testResponseCodeForAnInvalidEmail() {
+        assertThat(response1.jsonPath().getString("responseCode"), equalTo("404"));
+    }
+
+    @Test
+    @DisplayName("Test response for an invalid email")
+    void testResponseForAnInvalidEmail() {
+        assertThat(response1.jsonPath().getString("message"), equalTo("Account not found with this email, try another email!"));
     }
 }

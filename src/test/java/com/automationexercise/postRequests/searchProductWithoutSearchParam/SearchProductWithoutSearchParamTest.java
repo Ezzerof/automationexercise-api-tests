@@ -1,5 +1,6 @@
-package com.automationexercise.postProductList.searchProductWithoutSearchParam;
+package com.automationexercise.postRequests.searchProductWithoutSearchParam;
 
+import com.automationexercise.api.endpoints.Routes;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -16,15 +17,13 @@ public class SearchProductWithoutSearchParamTest {
     public final static int statusCode = 200; // Entered by tester
     public final static String expectedStatusCode = "400"; // Entered by tester
     final static String searchProduct = "jeans"; // Entered by tester
-    final static String URL = "https://automationexercise.com/api/searchProduct"; // Entered by tester
-
 
     @BeforeAll
     static void init() {
         response = given()
                 .queryParam(searchProduct)
                 .when()
-                .post(URL)
+                .post(Routes.postSearchProduct_url)
                 .then()
                 .statusCode(statusCode)
                 .extract().response();

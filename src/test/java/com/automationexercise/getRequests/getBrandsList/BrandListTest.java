@@ -1,5 +1,6 @@
 package com.automationexercise.getRequests.getBrandsList;
 
+import com.automationexercise.api.endpoints.Routes;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -15,7 +16,6 @@ public class BrandListTest {
     public final static int expectedStatusCode = 200; // Entered by tester
     public final static int sizeOfTheList = 34; // Entered by tester
     public final static String serverName = "cloudflare"; // Entered by tester
-    final static String URL = "https://automationexercise.com/api/brandsList"; // Entered by tester
     final static String contentType = "Content-Type=text/html; charset=utf-8";
     static Response response;
     static int actualStatusCode = 0;
@@ -24,7 +24,7 @@ public class BrandListTest {
     static void init() {
         response = given()
                 .when()
-                .get(URL)
+                .get(Routes.getBrands_url)
                 .then()
                 .extract().response();
     }

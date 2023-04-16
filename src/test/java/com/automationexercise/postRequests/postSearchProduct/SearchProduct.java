@@ -1,16 +1,9 @@
-package com.automationexercise.postProductList.postSearchProduct;
+package com.automationexercise.postRequests.postSearchProduct;
 
 import io.restassured.response.Response;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestTemplate;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvFileSource;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -20,7 +13,6 @@ public class SearchProduct {
     static Response response;
     static int actualStatusCode = 0;
     public final static int expectedStatusCode = 200; // Entered by tester
-    final static String URL = "https://automationexercise.com/api/searchProduct"; // Entered by tester
     static String searchProduct = "tshirt";
     final static String queryParam = "search_product";
 
@@ -34,7 +26,7 @@ public class SearchProduct {
 //                .contentType("application/json")
 //                .body("{ \"search_product\": \"" + searchProduct + "\" }")
 //                .when()
-//                .post(URL)
+//                .post(Routes.postSearchProduct_url)
 //                .then()
 //                .log().all()
 //                .statusCode(expectedStatusCode)

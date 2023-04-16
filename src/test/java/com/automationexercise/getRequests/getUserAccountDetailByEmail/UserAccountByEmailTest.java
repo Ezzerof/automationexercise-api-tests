@@ -1,6 +1,6 @@
 package com.automationexercise.getRequests.getUserAccountDetailByEmail;
 
-import io.restassured.RestAssured;
+import com.automationexercise.api.endpoints.Routes;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -17,7 +17,6 @@ public class UserAccountByEmailTest {
     static String emailAddress = "ezzerof9999@gmail.com"; // Entered by tester
     static String wrongEmailAddress = "thisEmailNotExists@gmail.uk"; // Entered by tester
     final static String contentType = "Content-Type=text/html; charset=utf-8";
-    final static String BASE_URL = "https://automationexercise.com/api";
     final static String queryParam = "email";
     static Response response;
     static Response response1;
@@ -25,11 +24,10 @@ public class UserAccountByEmailTest {
 
     @BeforeAll
     static void init() {
-        RestAssured.baseURI = BASE_URL;
         response = given()
-                .queryParam(queryParam, emailAddress)
+                .param(queryParam, emailAddress)
                 .when()
-                .get("/getUserDetailByEmail")
+                .get(Routes.getUserAccountByEmail_url)
                 .then()
                 .statusCode(expectedStatusCode)
                 .extract().response();
@@ -85,11 +83,10 @@ public class UserAccountByEmailTest {
 
     @BeforeAll
     void setUp() {
-        RestAssured.baseURI = BASE_URL;
         response1 = given()
                 .queryParam(queryParam, wrongEmailAddress)
                 .when()
-                .get("/getUserDetailByEmail")
+                .get(Routes.getUserAccountByEmail_url)
                 .then()
                 .statusCode(expectedStatusCode)
                 .extract().response();

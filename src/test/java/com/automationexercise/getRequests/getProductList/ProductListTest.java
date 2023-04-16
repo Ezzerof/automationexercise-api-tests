@@ -1,6 +1,6 @@
 package com.automationexercise.getRequests.getProductList;
 
-import com.automationexercise.getRequests.GetTest;
+import com.automationexercise.api.endpoints.Routes;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -16,7 +16,6 @@ public class ProductListTest {
     public final static int sizeOfTheList = 34; // Entered by tester
     public final static String serverName = "cloudflare"; // Entered by tester
     final static String contentType = "Content-Type=text/html; charset=utf-8";
-    final static String URL = "https://automationexercise.com/api/productsList";
     static Response response;
     static int actualStatusCode = 0;
 
@@ -24,9 +23,10 @@ public class ProductListTest {
     void init() {
         response = given()
                 .when()
-                .get(URL)
+                .get(Routes.getProducts_url)
                 .then()
                 .extract().response();
+        actualStatusCode = response.getStatusCode();
     }
 
     @TestTemplate
@@ -50,7 +50,6 @@ public class ProductListTest {
     @Test
     @DisplayName("Test Status Code: " + expectedStatusCode)
     void testStatusCode() {
-        actualStatusCode = response.getStatusCode();
         assertThat(actualStatusCode, equalTo(expectedStatusCode));
     }
 

@@ -1,4 +1,4 @@
-package com.automationexercise.getRequests.getProductList;
+package com.automationexercise.api.tests.brandsListTests;
 
 import com.automationexercise.api.endpoints.Routes;
 import io.restassured.response.Response;
@@ -11,7 +11,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class ProductListTest {
+public class BrandsListTest {
+
     public final static int expectedStatusCode = 200; // Entered by tester
     public final static int sizeOfTheList = 34; // Entered by tester
     public final static String serverName = "cloudflare"; // Entered by tester
@@ -20,28 +21,23 @@ public class ProductListTest {
     static int actualStatusCode = 0;
 
     @BeforeAll
-    void init() {
+    static void init() {
         response = given()
                 .when()
-                .get(Routes.getProducts_url)
+                .get(Routes.getBrands_url)
                 .then()
                 .extract().response();
-        actualStatusCode = response.getStatusCode();
     }
 
     @TestTemplate
-    @DisplayName("Testing products details")
-    @ParameterizedTest(name = "{index} - Product id: {0}")
-    @CsvFileSource(files = "src\\test\\resources\\ProductDetails.csv", numLinesToSkip = 1)
-    public void testProductDetails(String id, String name, String price, String brand, String usertype, String category) {
+    @DisplayName("Testing brand list")
+    @ParameterizedTest(name = "{index} - Brand id: {0}")
+    @CsvFileSource(files = "src\\test\\resources\\AllBrands.csv", numLinesToSkip = 1)
+    public void testBrandsList(String id, String brand) {
 
         //try {
-        assertThat(response.jsonPath().getString("products.find { it.id == " + id + "}.id"), equalTo(id));
-        assertThat(response.jsonPath().getString("products.find { it.id == " + id + "}.name"), equalTo(name));
-        assertThat(response.jsonPath().getString("products.find { it.id == " + id + "}.price"), equalTo(price));
-        assertThat(response.jsonPath().getString("products.find { it.id == " + id + "}.brand"), equalTo(brand));
-        assertThat(response.jsonPath().getString("products.find { it.id == " + id + "}.category.usertype.usertype"), equalTo(usertype));
-        assertThat(response.jsonPath().getString("products.find { it.id == " + id + "}.category.category"), equalTo(category));
+        assertThat(response.jsonPath().getString("brands.find { it.id == " + id + "}.id"), equalTo(id));
+        assertThat(response.jsonPath().getString("brands.find { it.id == " + id + "}.brand"), equalTo(brand));
 //        } catch (AssertionError e) {
 //            System.out.println("AssertionError: " + e.getMessage());
 //        }
@@ -50,13 +46,14 @@ public class ProductListTest {
     @Test
     @DisplayName("Test Status Code: " + expectedStatusCode)
     void testStatusCode() {
+        actualStatusCode = response.getStatusCode();
         assertThat(actualStatusCode, equalTo(expectedStatusCode));
     }
 
     @Test
     @DisplayName("Check size of the list should be: " + sizeOfTheList)
     void checkSizeOfTheList() {
-        List<String> productNames = response.jsonPath().getList("products.name");
+        List<String> productNames = response.jsonPath().getList("brands.id");
         assertThat(productNames.size(), equalTo(sizeOfTheList));
     }
 

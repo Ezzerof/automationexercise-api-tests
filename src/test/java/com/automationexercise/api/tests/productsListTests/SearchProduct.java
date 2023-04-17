@@ -1,4 +1,4 @@
-package com.automationexercise.postRequests.postSearchProduct;
+package com.automationexercise.api.tests.productsListTests;
 
 import io.restassured.response.Response;
 

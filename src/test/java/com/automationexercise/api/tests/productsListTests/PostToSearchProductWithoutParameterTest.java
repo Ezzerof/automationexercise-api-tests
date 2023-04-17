@@ -7,33 +7,36 @@ import org.junit.jupiter.api.*;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class PostProductListTest {
+public class PostToSearchProductWithoutParameterTest {
 
     public static Response response;
 
     @Test
     @Order(1)
-    @DisplayName("Deleting existing account from invalid endpoint")
+    @DisplayName("Post to search product without parameter")
     public void init() {
         response = given()
                 .contentType("application/x-www-form-urlencoded")
-                .post(Routes.postProducts_url);
+                .post(Routes.postSearchProduct_url);
+        System.out.println(response.getBody().asString());
 
     }
 
     @Test
     @Order(2)
-    @DisplayName("Test response message should be method not supported")
-    void testResponseMessageShouldBeAccountDeleted() {
-        assertThat(response.jsonPath().getString("message"), equalTo("This request method is not supported."));
+    @DisplayName("Test response message should be bad request")
+    void testResponseMessageShouldBeBadRequest() {
+        assertThat(response.jsonPath().getString("message"), equalTo("Bad request, search_product parameter is missing in POST request."));
     }
+
 
     @Test
     @Order(3)
-    @DisplayName("Test response code should be 405")
-    void testResponseCodeShouldBe405() {
-        assertThat(response.jsonPath().getString("responseCode"), equalTo("405"));
+    @DisplayName("Test response code should be 400")
+    void testResponseCodeShouldBe200() {
+        assertThat(response.jsonPath().getString("responseCode"), equalTo("400"));
     }
 
     @Test

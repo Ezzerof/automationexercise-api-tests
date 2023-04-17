@@ -9,6 +9,7 @@ import org.junit.jupiter.params.provider.CsvFileSource;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class VerifyLoginWithValidDetailsTest {
@@ -19,13 +20,14 @@ public class VerifyLoginWithValidDetailsTest {
     @TestTemplate
     @DisplayName("Verify user account")
     @ParameterizedTest(name = "{index} - Name: {0}")
-    @CsvFileSource(files = "src\\test\\resources\\DeleteUser.csv", numLinesToSkip = 1)
+    @CsvFileSource(files = "src\\test\\resources\\VerifyLogin.csv", numLinesToSkip = 1)
     public void init(String email, String password) {
         response = given()
                 .contentType("application/x-www-form-urlencoded")
                 .formParams("email", email, "password", password)
                 .post(Routes.postLoginDetails_url);
     }
+
     @Order(2)
     @Test
     public void testVerifyLoginWithValidDetails() {

@@ -1,4 +1,4 @@
-package com.automationexercise.api.tests.productsListTests;
+package com.automationexercise.api.tests.brandsListTests;
 
 import com.automationexercise.api.endpoints.Routes;
 import io.restassured.response.Response;
@@ -7,25 +7,30 @@ import org.junit.jupiter.api.*;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class PostProductListTest {
+public class PutToBrandsListTest {
 
     public static Response response;
 
     @Test
     @Order(1)
-    @DisplayName("Deleting existing account from invalid endpoint")
+    @DisplayName("Putting to brands list")
     public void init() {
         response = given()
                 .contentType("application/x-www-form-urlencoded")
-                .post(Routes.postProducts_url);
+                .when()
+                .put(Routes.putBrands_url)
+                .then()
+                .extract().response();
+        System.out.println(response.getBody().asString());
 
     }
 
     @Test
     @Order(2)
     @DisplayName("Test response message should be method not supported")
-    void testResponseMessageShouldBeAccountDeleted() {
+    void testResponseMessageShouldBeNotSupported() {
         assertThat(response.jsonPath().getString("message"), equalTo("This request method is not supported."));
     }
 

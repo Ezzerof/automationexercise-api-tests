@@ -9,10 +9,12 @@ import org.junit.jupiter.params.provider.CsvFileSource;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class CreateUserTest {
     public static Response response;
+
     @Order(1)
     @TestTemplate
     @DisplayName("Create user account")
@@ -24,18 +26,22 @@ public class CreateUserTest {
         response = given()
                 .contentType("application/x-www-form-urlencoded")
                 .formParams("name", name, "email", email, "password", password, "title", title, "birth_date", birthDate, "birth_month", birthMonth, "birth_year", birthYear, "firstname", firstName, "lastname", lastName, "company", company, "address1", address1, "address2", address2, "country", country, "zipcode", zipCode, "state", state, "city", city, "mobile_number", mobileNumber)
-                .post(Routes.postUserAccount_url);
+                .post(Routes.postUserAccount_url)
+                .then()
+                .extract().response();
 
 //        } catch (AssertionError e) {
 //            System.out.println("AssertionError: " + e.getMessage());
 //        }
     }
+
     @Order(2)
     @Test
     @DisplayName("Test response message should be User created!")
     void testResponseMessage() {
         assertThat(response.jsonPath().getString("message"), equalTo("User created!"));
     }
+
     @Order(3)
     @Test
     @DisplayName("Test response code should be 201")

@@ -25,9 +25,10 @@ public class VerifyLoginWithoutEmailTest {
     public void init(String email, String password) {
         response = given()
                 .contentType("application/x-www-form-urlencoded")
-                .formParams( "password", password)
+                .formParams("password", password)
                 .post(Routes.postLoginDetails_url);
     }
+
     @Order(2)
     @Test
     @DisplayName("Test response message should be Bad request")

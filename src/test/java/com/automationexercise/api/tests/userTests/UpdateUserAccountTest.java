@@ -15,6 +15,7 @@ import static org.hamcrest.Matchers.equalTo;
 public class UpdateUserAccountTest {
 
     public static Response response;
+
     @Order(1)
     @TestTemplate
     @DisplayName("Update user account")

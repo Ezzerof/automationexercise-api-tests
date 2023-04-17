@@ -9,6 +9,7 @@ import org.junit.jupiter.params.provider.CsvFileSource;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class VerifyLoginWithValidDetailsTest {
@@ -26,6 +27,7 @@ public class VerifyLoginWithValidDetailsTest {
                 .formParams("email", email, "password", password)
                 .post(Routes.postLoginDetails_url);
     }
+
     @Order(2)
     @Test
     public void testVerifyLoginWithValidDetails() {

@@ -27,6 +27,7 @@ public class VerifyLoginWithInvalidDetailsTest {
                 .formParams("email", email, "password", password)
                 .post(Routes.postLoginDetails_url);
     }
+
     @Order(2)
     @Test
     @DisplayName("Test response message should be User not found!")

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.javafaker.Faker;
 import io.restassured.RestAssured;
+import io.restassured.config.EncoderConfig;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,7 +26,7 @@ public class UserTest {
     public void setupData() {
         faker = new Faker();
         userPayload = new User();
-        userPayload.setName(faker.name().username());
+        userPayload.setName("MoonStar"); // username is set
         userPayload.setPassword("hello123");
         userPayload.setFirstName(faker.name().firstName());
         userPayload.setLastName(faker.name().lastName());
@@ -57,55 +58,60 @@ public class UserTest {
 
     }
 
-//    @Test
-//    public void testUpdateAccount() {
-//
-//        String name = "John Smith";
-//        String email = "johnsmith@example.com";
-//        String password = "newpassword";
-//        String title = "Mr";
-//        String birthDate = "01";
-//        String birthMonth = "01";
-//        String birthYear = "1990";
-//        String firstName = "John";
-//        String lastName = "Smith";
-//        String company = "ABC Inc.";
-//        String address1 = "123 Main St";
-//        String address2 = "";
-//        String country = "US";
-//        String zipCode = "12345";
-//        String state = "CA";
-//        String city = "Los Angeles";
-//        String mobileNumber = "1234567890";
-//
-//        Response response = given()
-//                .contentType(ContentType.JSON)
-//                .body("{"
-//                        + "\"name\": \"" + name + "\","
-//                        + "\"email\": \"" + email + "\","
-//                        + "\"password\": \"" + password + "\","
-//                        + "\"title\": \"" + title + "\","
-//                        + "\"birth_date\": \"" + birthDate + "\","
-//                        + "\"birth_month\": \"" + birthMonth + "\","
-//                        + "\"birth_year\": \"" + birthYear + "\","
-//                        + "\"firstname\": \"" + firstName + "\","
-//                        + "\"lastname\": \"" + lastName + "\","
-//                        + "\"company\": \"" + company + "\","
-//                        + "\"address1\": \"" + address1 + "\","
-//                        + "\"address2\": \"" + address2 + "\","
-//                        + "\"country\": \"" + country + "\","
-//                        + "\"zipcode\": \"" + zipCode + "\","
-//                        + "\"state\": \"" + state + "\","
-//                        + "\"city\": \"" + city + "\","
-//                        + "\"mobile_number\": \"" + mobileNumber + "\""
-//                        + "}")
-//                .when()
-//                .post(Routes.postUserAccount_url);
-//
-//        response.then()
-//                .assertThat()
-//                .statusCode(200)
-//                .body(equalTo("User updated!"));
-//    }
+    @Test
+    public void testUpdateAccount() {
+
+        String name = "John Smith";
+        String email = "johnsmith@example.com";
+        String password = "newpassword";
+        String title = "Mr";
+        String birthDate = "01";
+        String birthMonth = "01";
+        String birthYear = "1990";
+        String firstName = "John";
+        String lastName = "Smith";
+        String company = "ABC Inc.";
+        String address1 = "123 Main St";
+        String address2 = "";
+        String country = "US";
+        String zipCode = "12345";
+        String state = "CA";
+        String city = "Los Angeles";
+        String mobileNumber = "1234567890";
+
+        Response response = given()
+                .contentType(ContentType.ANY)
+                .config(RestAssured.config()
+                        .encoderConfig(
+                                EncoderConfig.encoderConfig()
+                                        .encodeContentTypeAs("*/*", ContentType.TEXT)))
+                .body("{"
+                        + "\"name\": \"" + name + "\","
+                        + "\"email\": \"" + email + "\","
+                        + "\"password\": \"" + password + "\","
+                        + "\"title\": \"" + title + "\","
+                        + "\"birth_date\": \"" + birthDate + "\","
+                        + "\"birth_month\": \"" + birthMonth + "\","
+                        + "\"birth_year\": \"" + birthYear + "\","
+                        + "\"firstname\": \"" + firstName + "\","
+                        + "\"lastname\": \"" + lastName + "\","
+                        + "\"company\": \"" + company + "\","
+                        + "\"address1\": \"" + address1 + "\","
+                        + "\"address2\": \"" + address2 + "\","
+                        + "\"country\": \"" + country + "\","
+                        + "\"zipcode\": \"" + zipCode + "\","
+                        + "\"state\": \"" + state + "\","
+                        + "\"city\": \"" + city + "\","
+                        + "\"mobile_number\": \"" + mobileNumber + "\""
+                        + "}")
+                .when()
+                .log().all()
+                .post(Routes.postUserAccount_url);
+
+        response.then()
+                .assertThat()
+                .statusCode(200)
+                .body(equalTo("User updated!"));
+    }
 
 }

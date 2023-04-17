@@ -1,4 +1,4 @@
-package com.automationexercise.getRequests.getUserAccountDetailByEmail;
+package com.automationexercise.api.tests.userTests;
 
 import com.automationexercise.api.endpoints.Routes;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -97,7 +97,7 @@ public class UserAccountByEmailTest {
 
     @Test
     @DisplayName("Test response code for an invalid email 404")
-    void testResponseCodeForAnInvalidEmail() {
+    void testResponseCodeForAnInvalidEmail404() {
         assertThat(response1.jsonPath().getString("responseCode"), equalTo("404"));
     }
 

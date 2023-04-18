@@ -56,6 +56,32 @@ public class CreateDeleteAccount {
 
         @Order(5)
         @Test
+        @DisplayName("Update account details")
+        void updateAccountDetails() {
+            updatedItems = JsonParser.createMap("src\\test\\resources\\user.json");
+            response = given()
+                    .contentType("application/x-www-form-urlencoded")
+                    .formParams(updatedItems)
+                    .put(Routes.putUserAccount_url);
+            System.out.println(response.getBody().asString());
+        }
+
+        @Order(6)
+        @Test
+        @DisplayName("Test Update account response message")
+        void testUpdatedAccountResponseMessage() {
+            assertThat(response.jsonPath().getString("message"), equalTo("User updated!"));
+        }
+
+        @Order(7)
+        @Test
+        @DisplayName("Test Update account response code should be 200")
+        void testUpdateAccountResponseCodeShouldBe200() {
+            assertThat(response.jsonPath().getString("responseCode"), equalTo("200"));
+        }
+
+        @Order(8)
+        @Test
         @DisplayName("Login with Valid Details")
         void testLoginWithValidDetails() {
             response = given()
@@ -65,21 +91,21 @@ public class CreateDeleteAccount {
             System.out.println(response.getBody().asString());
         }
 
-        @Order(6)
+        @Order(9)
         @Test
         @DisplayName("Test Login with Valid details response message")
         void testLoginWithValidDetailsResponseMessage() {
             assertThat(response.jsonPath().getString("message"), equalTo("User exists!"));
         }
 
-        @Order(7)
+        @Order(10)
         @Test
         @DisplayName("Test Login with Valid details response code should be 200")
         void testLoginWithValidDetailsResponseCodeShouldBe200() {
             assertThat(response.jsonPath().getString("responseCode"), equalTo("200"));
         }
 
-        @Order(8)
+        @Order(11)
         @Test
         @DisplayName("Login with Invalid Details")
         void loginWithInvalidDetails() {
@@ -91,21 +117,21 @@ public class CreateDeleteAccount {
             System.out.println(response.getBody().asString());
         }
 
-        @Order(9)
+        @Order(12)
         @Test
         @DisplayName("Test Login with Invalid details response message")
         void testLoginWithInvalidDetailsResponseMessage() {
             assertThat(response.jsonPath().getString("message"), equalTo("User not found!"));
         }
 
-        @Order(10)
+        @Order(13)
         @Test
         @DisplayName("Test Login with Invalid details response code should be 404")
         void testLoginWithInvalidDetailsResponseCodeShouldBe404() {
             assertThat(response.jsonPath().getString("responseCode"), equalTo("404"));
         }
 
-        @Order(11)
+        @Order(14)
         @Test
         @DisplayName("Login without Email")
         void loginWithoutEmail() {
@@ -116,7 +142,7 @@ public class CreateDeleteAccount {
             System.out.println(response.getBody().asString());
         }
 
-        @Order(12)
+        @Order(15)
         @Test
         @DisplayName("Test Login without email response message")
         void testLoginWithoutEmailResponseMessage() {
@@ -124,14 +150,14 @@ public class CreateDeleteAccount {
                 equalTo("Bad request, email or password parameter is missing in POST request."));
         }
 
-        @Order(13)
+        @Order(16)
         @Test
         @DisplayName("Test Login without email response code should be 400")
         void testLoginWithoutEmailResponseCodeShouldBe400() {
             assertThat(response.jsonPath().getString("responseCode"), equalTo("400"));
         }
 
-        @Order(14)
+        @Order(17)
         @Test
         @DisplayName("Get user account detail by email")
         void testGetUserDetailsByEmail() {
@@ -251,147 +277,6 @@ public class CreateDeleteAccount {
         }
 
     }
-
-
-
-//    @Order(15)
-//    @Test
-//    @DisplayName("Test User name")
-//    void testUserName() {
-//        assertThat(response.jsonPath().getString("user.name"), equalTo(items.get("name")));
-//    }
-//
-//    @Order(16)
-//    @Test
-//    @DisplayName("Test User email")
-//    void testUserEmail() {
-//        assertThat(response.jsonPath().getString("user.email"), equalTo(items.get("email")));
-//    }
-//
-//    @Order(17)
-//    @Test
-//    @DisplayName("Test User Title")
-//    void testUserTitle() {
-//        assertThat(response.jsonPath().getString("user.title"), equalTo(items.get("title")));
-//    }
-//
-//    @Order(18)
-//    @Test
-//    @DisplayName("Test User birth day")
-//    void testUserBirthDay() {
-//        assertThat(response.jsonPath().getString("user.birth_day"), equalTo(items.get("birth_date")));
-//    }
-//
-//    @Order(19)
-//    @Test
-//    @DisplayName("Test User birth month")
-//    void testUserBirthMonth() {
-//        assertThat(response.jsonPath().getString("user.birth_month"), equalTo(items.get("birth_month")));
-//    }
-//
-//    @Order(20)
-//    @Test
-//    @DisplayName("Test User birth year")
-//    void testUserBirthYear() {
-//        assertThat(response.jsonPath().getString("user.birth_year"), equalTo(items.get("birth_year")));
-//    }
-//
-//    @Order(21)
-//    @Test
-//    @DisplayName("Test User first name")
-//    void testUserFirstName() {
-//        assertThat(response.jsonPath().getString("user.first_name"), equalTo(items.get("firstname")));
-//    }
-//
-//    @Order(22)
-//    @Test
-//    @DisplayName("Test User last name")
-//    void testUserLastName() {
-//        assertThat(response.jsonPath().getString("user.last_name"), equalTo(items.get("lastname")));
-//    }
-//
-//    @Order(23)
-//    @Test
-//    @DisplayName("Test User company")
-//    void testUserCompany() {
-//        assertThat(response.jsonPath().getString("user.company"), equalTo(items.get("company")));
-//    }
-//
-//    @Order(24)
-//    @Test
-//    @DisplayName("Test User address1")
-//    void testUserAddress1() {
-//        assertThat(response.jsonPath().getString("user.address1"), equalTo(items.get("address1")));
-//    }
-//
-//    @Order(25)
-//    @Test
-//    @DisplayName("Test User address2")
-//    void testUserAddress2() {
-//        assertThat(response.jsonPath().getString("user.address2"), equalTo(items.get("address2")));
-//    }
-//
-//
-//    @Order(26)
-//    @Test
-//    @DisplayName("Test User country")
-//    void testUserCountry() {
-//        assertThat(response.jsonPath().getString("user.country"), equalTo(items.get("country")));
-//    }
-//
-//    @Order(27)
-//    @Test
-//    @DisplayName("Test User state")
-//    void testUserState() {
-//        assertThat(response.jsonPath().getString("user.state"), equalTo(items.get("state")));
-//    }
-//
-//    @Order(28)
-//    @Test
-//    @DisplayName("Test User city")
-//    void testUserCity() {
-//        assertThat(response.jsonPath().getString("user.city"), equalTo(items.get("city")));
-//    }
-//
-//    @Order(29)
-//    @Test
-//    @DisplayName("Test User zipcode")
-//    void testUserZipcode() {
-//        assertThat(response.jsonPath().getString("user.zipcode"), equalTo(items.get("zipcode")));
-//    }
-//
-//    @Order(30)
-//    @Test
-//    @DisplayName("Test User Details by email response code should be 200")
-//    void testUserDetailsByEmailResponseCodeShouldBe400() {
-//        assertThat(response.jsonPath().getString("responseCode"), equalTo("200"));
-//    }
-//
-//    @Order(31)
-//    @Test
-//    @DisplayName("Update User details")
-//    void testUpdateUserDetails() {
-//        updatedItems = JsonParser.createMap("src\\test\\resources\\UpdatedUser.json");
-//        response = given()
-//                .contentType("application/x-www-form-urlencoded")
-//                .formParams(updatedItems)
-//                .put(Routes.putUserAccount_url);
-//        System.out.println(response.getBody().asString());
-//    }
-//
-//    @Order(32)
-//    @Test
-//    @DisplayName("Test Update User Account response message")
-//    void testUpdateUserAccountResponseMessage() {
-//        assertThat(response.jsonPath().getString("message"), equalTo("User updated!"));
-//    }
-//
-//    @Order(33)
-//    @Test
-//    @DisplayName("Test Update User Account response code should be 200")
-//    void testUpdateUserAccountResponseCodeShouldBe400() {
-//        assertThat(response.jsonPath().getString("responseCode"), equalTo("200"));
-//    }
 
     @Order(3)
     @Nested

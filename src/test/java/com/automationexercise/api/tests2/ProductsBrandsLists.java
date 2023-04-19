@@ -14,10 +14,11 @@ import java.util.List;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 public class ProductsBrandsLists {
-
+    static String searchedProduct = "tops";
     static Response response;
     JsonPath expectedJsonPath;
     static String pathToJson = "src/test/resources/ExpectedProductsList.json";
@@ -26,6 +27,34 @@ public class ProductsBrandsLists {
         response = given()
                 .when()
                 .get(url)
+                .then()
+                .extract().response();
+    }
+
+    static void postResponse(String url) {
+        response = given()
+                .contentType("application/x-www-form-urlencoded")
+                .when()
+                .post(url)
+                .then()
+                .extract().response();
+    }
+
+    static void postResponse(String url, String product) {
+        response = given()
+                .contentType("application/x-www-form-urlencoded")
+                .formParams("search_product", product)
+                .when()
+                .post(url)
+                .then()
+                .extract().response();
+    }
+
+    static void putResponse(String url) {
+        response = given()
+                .contentType("application/x-www-form-urlencoded")
+                .when()
+                .put(url)
                 .then()
                 .extract().response();
     }
@@ -77,7 +106,66 @@ public class ProductsBrandsLists {
 
     @Order(3)
     @Nested
-    class getAllBrandsList {
+    class PostToAllProductsList {
+        @Order(1)
+        @Test
+        @DisplayName("Test Post to all products response message")
+        void testResponseMessage() {
+            postResponse(Routes.postProducts_url);
+            assertThat(response.jsonPath().getString("message"), equalTo("This request method is not supported."));
+        }
+
+        @Order(2)
+        @Test
+        @DisplayName("Test Post to all products response code")
+        void testResponseCode() {
+            postResponse(Routes.postProducts_url);
+            assertThat(response.jsonPath().getString("responseCode"), equalTo("405"));
+        }
+    }
+
+    @Order(4)
+    @Nested
+    class PostToSearchProduct {
+
+        @Order(1)
+        @Test
+        @DisplayName("Test Post to search product response message")
+        void testResponseMessage() {
+            postResponse(Routes.postSearchProduct_url, searchedProduct); // Will save into a List response and check category with expected
+            List<String> productTypeList = response.jsonPath().getList("products.category.category");
+            assertTrue(productTypeList.stream().anyMatch(element -> element.toLowerCase().contains(searchedProduct)));
+        }
+
+        @Order(2)
+        @Test
+        @DisplayName("Test Post to search product response code")
+        void testResponseCode() {
+            postResponse(Routes.postSearchProduct_url, searchedProduct);
+            assertThat(response.jsonPath().getString("responseCode"), equalTo("200"));
+        }
+
+        @Order(3)
+        @Test
+        @DisplayName("Test Post to search product without parameter response code")
+        void testSearchProductWithoutParameterResponseCode() {
+            postResponse(Routes.postSearchProduct_url);
+            assertThat(response.jsonPath().getString("responseCode"), equalTo("400"));
+        }
+
+        @Order(4)
+        @Test
+        @DisplayName("Test Post to search product without parameter response message")
+        void testSearchProductWithoutParameterResponseMessage() {
+            postResponse(Routes.postSearchProduct_url);
+            assertThat(response.jsonPath().getString("message"), equalTo("Bad request, search_product parameter is missing in POST request."));
+        }
+
+    }
+
+    @Order(6)
+    @Nested
+    class GetAllBrandsList {
 
         @Order(1)
         @Test
@@ -109,6 +197,29 @@ public class ProductsBrandsLists {
         void testRespondMessage() {
             assertThat(response.jsonPath().getString("responseCode"), equalTo("200"));
         }
+
+    }
+
+    @Order(7)
+    @Nested
+    class PutToAllBrandsList {
+        @Order(1)
+        @Test
+        @DisplayName("Test response message should be method not supported")
+        void testResponseMessageShouldBeNotSupported() {
+            putResponse(Routes.putBrands_url);
+            assertThat(response.jsonPath().getString("message"), equalTo("This request method is not supported."));
+        }
+        @Order(2)
+        @Test
+        @DisplayName("Test response code should be 405")
+        void testResponseCodeShouldBe405() {
+            putResponse(Routes.putBrands_url);
+            assertThat(response.jsonPath().getString("responseCode"), equalTo("405"));
+        }
+
+
+
 
     }
 }

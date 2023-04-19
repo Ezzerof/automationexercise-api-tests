@@ -14,7 +14,7 @@ public class PostProductListTest {
 
     @Test
     @Order(1)
-    @DisplayName("Deleting existing account from invalid endpoint")
+    @DisplayName("Post all products")
     public void init() {
         response = given()
                 .contentType("application/x-www-form-urlencoded")

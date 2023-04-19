@@ -31,6 +31,7 @@ public class PostToSearchProductTest {
                 .contentType("application/x-www-form-urlencoded")
                 .formParams("search_product", product)
                 .post(Routes.postSearchProduct_url);
+        System.out.println(response.getBody().asString());
 
     }
 

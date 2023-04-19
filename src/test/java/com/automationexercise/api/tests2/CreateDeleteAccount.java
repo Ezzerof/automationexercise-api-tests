@@ -17,6 +17,69 @@ public class CreateDeleteAccount {
     static Map<String, String> items;
     static Map<String, String> updatedItems;
 
+    static Response postResponse(Map<String, String> map, String url) {
+        response =given()
+            .contentType("application/x-www-form-urlencoded")
+            .formParams(map)
+            .post(url);
+        return response;
+    }
+
+    static Response postResponse(Map<String, String > map, String url, String key1, String key2){
+        response = given()
+            .contentType("application/x-www-form-urlencoded")
+            .formParams(key1, map.get(key1), key2, map.get(key2))
+            .post(url);
+       // System.out.println(response.getBody().asString());
+        return response;
+    }
+    static Response postResponse(Map<String, String > map, String url, String key1, String key2, String faultValue){
+        response = given()
+            .contentType("application/x-www-form-urlencoded")
+            .formParams(key1, map.get(key1) + faultValue, key2, map.get(key2) + faultValue)
+            .post(url);
+       // System.out.println(response.getBody().asString());
+        return response;
+    }
+
+
+    static Response postResponse(Map<String, String> map, String url, String key){
+       response = given()
+            .contentType("application/x-www-form-urlencoded")
+            .formParams(key, map.get(key))
+            .post(url);
+        //System.out.println(response.getBody().asString());
+        return response;
+    }
+
+    static Response getResponse(Map<String, String> map, String url, String key){
+        response = given()
+            .contentType("application/x-www-form-urlencoded")
+            .formParams(key, map.get(key))
+            .get(url);
+
+        return response;
+    }
+
+    static Response putResponse(Map<String, String> map, String url){
+        response = given()
+            .contentType("application/x-www-form-urlencoded")
+            .formParams(map)
+            .put(url);
+        return response;
+    }
+
+    static Response deleteResponse(Map<String, String> map, String url, String key, String key2){
+        response = given()
+            .contentType("application/x-www-form-urlencoded")
+            .formParams(key, map.get(key), key2, map.get(key2))
+            .delete(url);
+        //System.out.println(response.getBody().asString());
+
+        return response;
+    }
+
+
     @Order(1)
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -25,11 +88,12 @@ public class CreateDeleteAccount {
         @Test
         void createAccount() {
             items = JsonParser.createMap("src\\test\\resources\\user.json");
-            response = given()
-                .contentType("application/x-www-form-urlencoded")
-                .formParams(items)
-                .post(Routes.postUserAccount_url);
-            System.out.println(response.getBody().asString());
+            response = postResponse(items,Routes.postUserAccount_url);
+//        given()
+//                .contentType("application/x-www-form-urlencoded")
+//                .formParams(items)
+//                .post(Routes.postUserAccount_url);
+//            System.out.println(response.getBody().asString());
         }
 
         @Order(2)
@@ -59,11 +123,13 @@ public class CreateDeleteAccount {
         @DisplayName("Update account details")
         void updateAccountDetails() {
             updatedItems = JsonParser.createMap("src\\test\\resources\\user.json");
-            response = given()
-                    .contentType("application/x-www-form-urlencoded")
-                    .formParams(updatedItems)
-                    .put(Routes.putUserAccount_url);
-            System.out.println(response.getBody().asString());
+            response = putResponse(updatedItems, Routes.putUserAccount_url);
+
+//                given()
+//                    .contentType("application/x-www-form-urlencoded")
+//                    .formParams(updatedItems)
+//                    .put(Routes.putUserAccount_url);
+//            System.out.println(response.getBody().asString());
         }
 
         @Order(6)
@@ -84,11 +150,13 @@ public class CreateDeleteAccount {
         @Test
         @DisplayName("Login with Valid Details")
         void testLoginWithValidDetails() {
-            response = given()
-                .contentType("application/x-www-form-urlencoded")
-                .formParams("email", items.get("email"), "password", items.get("password"))
-                .post(Routes.postLoginDetails_url);
-            System.out.println(response.getBody().asString());
+            response = postResponse(items, Routes.postLoginDetails_url, "email", "password");
+//
+//                given()
+//                .contentType("application/x-www-form-urlencoded")
+//                .formParams("email", items.get("email"), "password", items.get("password"))
+//                .post(Routes.postLoginDetails_url);
+//            System.out.println(response.getBody().asString());
         }
 
         @Order(9)
@@ -109,12 +177,15 @@ public class CreateDeleteAccount {
         @Test
         @DisplayName("Login with Invalid Details")
         void loginWithInvalidDetails() {
-            response = given()
-                .contentType("application/x-www-form-urlencoded")
-                .formParams("email", items.get("email") + "io", "password",
-                    items.get("password") + "000")
-                .post(Routes.postLoginDetails_url);
-            System.out.println(response.getBody().asString());
+            response = postResponse(items, Routes.postLoginDetails_url, "email", "password", "false");
+
+
+//                given()
+//                .contentType("application/x-www-form-urlencoded")
+//                .formParams("email", items.get("email") + "io", "password",
+//                    items.get("password") + "000")
+//                .post(Routes.postLoginDetails_url);
+//            System.out.println(response.getBody().asString());
         }
 
         @Order(12)
@@ -135,11 +206,13 @@ public class CreateDeleteAccount {
         @Test
         @DisplayName("Login without Email")
         void loginWithoutEmail() {
-            response = given()
-                .contentType("application/x-www-form-urlencoded")
-                .formParams("password", items.get("password"))
-                .post(Routes.postLoginDetails_url);
-            System.out.println(response.getBody().asString());
+            response = postResponse(items, Routes.postLoginDetails_url, "password");
+
+//                given()
+//                .contentType("application/x-www-form-urlencoded")
+//                .formParams("password", items.get("password"))
+//                .post(Routes.postLoginDetails_url);
+//            System.out.println(response.getBody().asString());
         }
 
         @Order(15)
@@ -161,10 +234,11 @@ public class CreateDeleteAccount {
         @Test
         @DisplayName("Get user account detail by email")
         void testGetUserDetailsByEmail() {
-            response = given()
-                .contentType("application/x-www-form-urlencoded")
-                .formParams("email", items.get("email"))
-                .get(Routes.getUserAccountByEmail_url);
+            response = getResponse(items, Routes.getUserAccountByEmail_url, "email");
+//                given()
+//                .contentType("application/x-www-form-urlencoded")
+//                .formParams("email", items.get("email"))
+//                .get(Routes.getUserAccountByEmail_url);
 
         }
     }
@@ -286,11 +360,12 @@ public class CreateDeleteAccount {
         @Test
         @DisplayName("Delete user")
         void deleteUser() {
-            response = given()
-                .contentType("application/x-www-form-urlencoded")
-                .formParams("email", items.get("email"), "password", items.get("password"))
-                .delete(Routes.deleteUserAccount_url);
-            System.out.println(response.getBody().asString());
+            response = deleteResponse(items, Routes.deleteUserAccount_url, "email", "password");
+//                given()
+//                .contentType("application/x-www-form-urlencoded")
+//                .formParams("email", items.get("email"), "password", items.get("password"))
+//                .delete(Routes.deleteUserAccount_url);
+//            System.out.println(response.getBody().asString());
         }
 
         @Order(2)

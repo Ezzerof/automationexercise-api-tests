@@ -1,4 +1,4 @@
-package com.automationexercise.api.csvPath.productsListTests;
+package com.automationexercise.api.csv_path.user_tests;
 
 import com.automationexercise.api.endpoints.Routes;
 import io.restassured.response.Response;
@@ -6,47 +6,43 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 
-import java.util.List;
-
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class PostToSearchProductTest {
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+public class DeleteUserTest {
 
     public static Response response;
-    static String searchedProduct;
 
     @TestTemplate
     @Order(1)
-    @DisplayName("Post to search product")
-    @ParameterizedTest(name = "{index} - Brand id: {0}")
-    @CsvFileSource(files = "src\\test\\resources\\SearchProduct.csv", numLinesToSkip = 1)
-    public void init(String product) {
-        searchedProduct = product;
+    @DisplayName("Deleting existing account")
+    @ParameterizedTest(name = "{index} - Name: {0}")
+    @CsvFileSource(files = "src\\test\\resources\\DeleteUser.csv", numLinesToSkip = 1)
+    public void init(String email, String password) {
         response = given()
+                .log().all()
                 .contentType("application/x-www-form-urlencoded")
-                .formParams("search_product", product)
-                .post(Routes.postSearchProduct_url);
-        System.out.println(response.getBody().asString());
+                .formParams("email", email, "password", password)
+                .delete(Routes.deleteUserAccount_url);
 
     }
 
+
     @Test
     @Order(2)
-    @DisplayName("Test returned list that contains searched product")
-    void testReturnedList() {
-        List<String> productTypeList = response.jsonPath().getList("products.category.category");
-        assertTrue(productTypeList.stream().anyMatch(element -> element.toLowerCase().contains(searchedProduct)));
+    @DisplayName("Test response message should be Account deleted!")
+    void testResponseMessageShouldBeAccountDeleted() {
+        assertThat(response.jsonPath().getString("message"), equalTo("Account deleted!"));
     }
 
     @Test
     @Order(3)
     @DisplayName("Test response code should be 200")
     void testResponseCodeShouldBe200() {
+
         assertThat(response.jsonPath().getString("responseCode"), equalTo("200"));
     }
 
@@ -56,6 +52,5 @@ public class PostToSearchProductTest {
     void testStatusCodeShouldBe200() {
         assertThat(response.getStatusCode(), equalTo(200));
     }
-
 
 }

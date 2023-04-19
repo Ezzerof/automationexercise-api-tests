@@ -1,4 +1,4 @@
-package com.automationexercise.api.jsonPath;
+package com.automationexercise.api.json_path;
 
 import com.automationexercise.api.endpoints.Routes;
 import io.restassured.response.Response;

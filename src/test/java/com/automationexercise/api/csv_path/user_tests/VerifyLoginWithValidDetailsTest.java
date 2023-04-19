@@ -1,4 +1,4 @@
-package com.automationexercise.api.csvPath.userTests;
+package com.automationexercise.api.csv_path.user_tests;
 
 import com.automationexercise.api.endpoints.Routes;
 import io.restassured.response.Response;
@@ -12,35 +12,33 @@ import static org.hamcrest.Matchers.equalTo;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class VerifyLoginWithoutEmailTest {
+public class VerifyLoginWithValidDetailsTest {
 
     static Response response;
-    static String password = "123456789";
 
     @Order(1)
     @TestTemplate
-    @DisplayName("Verify user account without email parameter")
+    @DisplayName("Verify user account")
     @ParameterizedTest(name = "{index} - Name: {0}")
-    @CsvFileSource(files = "src\\test\\resources\\DeleteUser.csv", numLinesToSkip = 1)
+    @CsvFileSource(files = "src\\test\\resources\\VerifyLogin.csv", numLinesToSkip = 1)
     public void init(String email, String password) {
         response = given()
                 .contentType("application/x-www-form-urlencoded")
-                .formParams("password", password)
+                .formParams("email", email, "password", password)
                 .post(Routes.postLoginDetails_url);
     }
 
     @Order(2)
     @Test
-    @DisplayName("Test response message should be Bad request")
     public void testVerifyLoginWithValidDetails() {
-        assertThat(response.jsonPath().getString("message"), equalTo("Bad request, email or password parameter is missing in POST request."));
+        assertThat(response.jsonPath().getString("message"), equalTo("User exists!"));
     }
 
     @Order(3)
     @Test
-    @DisplayName("Test response code should be 400")
-    void testResultCodeShouldBe400() {
-        assertThat(response.jsonPath().getString("responseCode"), equalTo("400"));
+    @DisplayName("Test response code should be 200")
+    void testResultCodeShouldBe200() {
+        assertThat(response.jsonPath().getString("responseCode"), equalTo("200"));
     }
 
     @Order(4)
@@ -50,5 +48,6 @@ public class VerifyLoginWithoutEmailTest {
         assertThat(response.getStatusCode(), equalTo(200));
 
     }
+
 
 }

@@ -13,6 +13,7 @@ import static org.hamcrest.Matchers.equalTo;
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 public class CreateDeleteAccount {
 
+
   static Response response;
   static Map<String, String> items;
   static Map<String, String> updatedItems;
@@ -484,5 +485,3 @@ public class CreateDeleteAccount {
       assertThat(response.jsonPath().getString("responseCode"), equalTo("200"));
     }
   }
-
-}

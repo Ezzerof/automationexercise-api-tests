@@ -1,4 +1,4 @@
-package com.automationexercise.api.tests.userTests;
+package com.automationexercise.api.csv_path.user_tests;
 
 import com.automationexercise.api.endpoints.Routes;
 import io.restassured.response.Response;
@@ -27,7 +27,8 @@ public class UpdateUserAccountTest {
         response = given()
                 .contentType("application/x-www-form-urlencoded")
                 .formParams("name", name, "email", email, "password", password, "title", title, "birth_date", birthDate, "birth_month", birthMonth, "birth_year", birthYear, "firstname", firstName, "lastname", lastName, "company", company, "address1", address1, "address2", address2, "country", country, "zipcode", zipCode, "state", state, "city", city, "mobile_number", mobileNumber)
-                .put(Routes.putUserAccount_url);
+                .put(Routes.putUserAccount_url)
+                .then().extract().response();
         System.out.println(response.jsonPath().getString("message"));
 
 //        } catch (AssertionError e) {

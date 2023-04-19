@@ -1,4 +1,4 @@
-package com.automationexercise.api.tests.productsListTests;
+package com.automationexercise.api.csv_path.products_list_tests;
 
 import com.automationexercise.api.endpoints.Routes;
 import io.restassured.response.Response;

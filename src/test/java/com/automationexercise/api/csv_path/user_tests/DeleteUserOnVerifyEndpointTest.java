@@ -1,4 +1,4 @@
-package com.automationexercise.api.tests.productsListTests;
+package com.automationexercise.api.csv_path.user_tests;
 
 import com.automationexercise.api.endpoints.Routes;
 import io.restassured.response.Response;
@@ -7,24 +7,27 @@ import org.junit.jupiter.api.*;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class PostProductListTest {
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+public class DeleteUserOnVerifyEndpointTest {
 
     public static Response response;
 
     @Test
     @Order(1)
-    @DisplayName("Post all products")
+    @DisplayName("Deleting existing account from invalid endpoint")
     public void init() {
         response = given()
                 .contentType("application/x-www-form-urlencoded")
-                .post(Routes.postProducts_url);
+                .delete(Routes.postLoginDetails_url);
 
     }
 
+
     @Test
     @Order(2)
-    @DisplayName("Test response message should be method not supported")
+    @DisplayName("Test response message should be request not supported")
     void testResponseMessageShouldBeAccountDeleted() {
         assertThat(response.jsonPath().getString("message"), equalTo("This request method is not supported."));
     }
@@ -33,6 +36,7 @@ public class PostProductListTest {
     @Order(3)
     @DisplayName("Test response code should be 405")
     void testResponseCodeShouldBe405() {
+
         assertThat(response.jsonPath().getString("responseCode"), equalTo("405"));
     }
 

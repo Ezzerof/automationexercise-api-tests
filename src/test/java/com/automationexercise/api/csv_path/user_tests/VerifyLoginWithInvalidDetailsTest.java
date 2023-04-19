@@ -1,4 +1,4 @@
-package com.automationexercise.api.tests.userTests;
+package com.automationexercise.api.csv_path.user_tests;
 
 import com.automationexercise.api.endpoints.Routes;
 import io.restassured.response.Response;
@@ -12,45 +12,42 @@ import static org.hamcrest.Matchers.equalTo;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class DeleteUserTest {
+public class VerifyLoginWithInvalidDetailsTest {
 
-    public static Response response;
+    static Response response;
 
-    @TestTemplate
     @Order(1)
-    @DisplayName("Deleting existing account")
+    @TestTemplate
+    @DisplayName("Verify user account with invalid details")
     @ParameterizedTest(name = "{index} - Name: {0}")
-    @CsvFileSource(files = "src\\test\\resources\\DeleteUser.csv", numLinesToSkip = 1)
+    @CsvFileSource(files = "src\\test\\resources\\WrongUsername.csv", numLinesToSkip = 1)
     public void init(String email, String password) {
         response = given()
-                .log().all()
                 .contentType("application/x-www-form-urlencoded")
                 .formParams("email", email, "password", password)
-                .delete(Routes.deleteUserAccount_url);
-
+                .post(Routes.postLoginDetails_url);
     }
 
-
-    @Test
     @Order(2)
-    @DisplayName("Test response message should be Account deleted!")
-    void testResponseMessageShouldBeAccountDeleted() {
-        assertThat(response.jsonPath().getString("message"), equalTo("Account deleted!"));
+    @Test
+    @DisplayName("Test response message should be User not found!")
+    public void testVerifyLoginWithValidDetails() {
+        assertThat(response.jsonPath().getString("message"), equalTo("User not found!"));
     }
 
-    @Test
     @Order(3)
-    @DisplayName("Test response code should be 200")
-    void testResponseCodeShouldBe200() {
-
-        assertThat(response.jsonPath().getString("responseCode"), equalTo("200"));
+    @Test
+    @DisplayName("Test response code should be 404")
+    void testResultCodeShouldBe404() {
+        assertThat(response.jsonPath().getString("responseCode"), equalTo("404"));
     }
 
-    @Test
     @Order(4)
-    @DisplayName("Test status code should be 200")
-    void testStatusCodeShouldBe200() {
+    @Test
+    @DisplayName("Test the status code should be 200")
+    void testTheResponseCodeShouldBe200() {
         assertThat(response.getStatusCode(), equalTo(200));
+
     }
 
 }

@@ -1,4 +1,4 @@
-package com.automationexercise.api.tests.productsListTests;
+package com.automationexercise.api.csv_path.brands_list_tests;
 
 import com.automationexercise.api.endpoints.Routes;
 import io.restassured.response.Response;
@@ -9,34 +9,36 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class PostToSearchProductWithoutParameterTest {
+public class PutToBrandsListTest {
 
     public static Response response;
 
     @Test
     @Order(1)
-    @DisplayName("Post to search product without parameter")
+    @DisplayName("Putting to brands list")
     public void init() {
         response = given()
                 .contentType("application/x-www-form-urlencoded")
-                .post(Routes.postSearchProduct_url);
+                .when()
+                .put(Routes.putBrands_url)
+                .then()
+                .extract().response();
         System.out.println(response.getBody().asString());
 
     }
 
     @Test
     @Order(2)
-    @DisplayName("Test response message should be bad request")
-    void testResponseMessageShouldBeBadRequest() {
-        assertThat(response.jsonPath().getString("message"), equalTo("Bad request, search_product parameter is missing in POST request."));
+    @DisplayName("Test response message should be method not supported")
+    void testResponseMessageShouldBeNotSupported() {
+        assertThat(response.jsonPath().getString("message"), equalTo("This request method is not supported."));
     }
-
 
     @Test
     @Order(3)
-    @DisplayName("Test response code should be 400")
-    void testResponseCodeShouldBe200() {
-        assertThat(response.jsonPath().getString("responseCode"), equalTo("400"));
+    @DisplayName("Test response code should be 405")
+    void testResponseCodeShouldBe405() {
+        assertThat(response.jsonPath().getString("responseCode"), equalTo("405"));
     }
 
     @Test

@@ -1,4 +1,4 @@
-package com.automationexercise.api.tests2;
+package com.automationexercise.api.jsonPath;
 
 import com.automationexercise.api.endpoints.Routes;
 import io.restassured.response.Response;
@@ -17,6 +17,62 @@ public class CreateDeleteAccount {
     static Map<String, String> items;
     static Map<String, String> updatedItems;
 
+    static void getResponse(String url, String email) {
+        response = given()
+                .contentType("application/x-www-form-urlencoded")
+                .formParams("email", email)
+                .get(url)
+                .then()
+                .extract().response();
+    }
+
+    static void postResponse(String url) {
+        response = given()
+                .contentType("application/x-www-form-urlencoded")
+                .when()
+                .post(url)
+                .then()
+                .extract().response();
+    }
+
+    static void postResponse(String url, Map<String, String> item) {
+        response = given()
+                .contentType("application/x-www-form-urlencoded")
+                .formParams(item)
+                .when()
+                .post(url)
+                .then()
+                .extract().response();
+    }
+
+    static void postResponse(String url, String password) {
+        response = given()
+                .contentType("application/x-www-form-urlencoded")
+                .formParams("password", password)
+                .when()
+                .post(url)
+                .then()
+                .extract().response();
+    }
+
+    static void postResponse(String url, String email, String password) {
+        response = given()
+                .contentType("application/x-www-form-urlencoded")
+                .formParams("email", email, "password", password)
+                .post(url)
+                .then()
+                .extract().response();
+    }
+
+    static void putResponse(String url, Map<String, String> updatedItems) {
+        response = given()
+                .contentType("application/x-www-form-urlencoded")
+                .formParams(updatedItems)
+                .put(url)
+                .then()
+                .extract().response();
+    }
+
     @Order(1)
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -25,10 +81,7 @@ public class CreateDeleteAccount {
         @Test
         void createAccount() {
             items = JsonParser.createMap("src\\test\\resources\\user.json");
-            response = given()
-                .contentType("application/x-www-form-urlencoded")
-                .formParams(items)
-                .post(Routes.postUserAccount_url);
+            postResponse(Routes.postUserAccount_url, items);
             System.out.println(response.getBody().asString());
         }
 
@@ -59,10 +112,7 @@ public class CreateDeleteAccount {
         @DisplayName("Update account details")
         void updateAccountDetails() {
             updatedItems = JsonParser.createMap("src\\test\\resources\\user.json");
-            response = given()
-                    .contentType("application/x-www-form-urlencoded")
-                    .formParams(updatedItems)
-                    .put(Routes.putUserAccount_url);
+            putResponse(Routes.putUserAccount_url, updatedItems);
             System.out.println(response.getBody().asString());
         }
 
@@ -84,10 +134,7 @@ public class CreateDeleteAccount {
         @Test
         @DisplayName("Login with Valid Details")
         void testLoginWithValidDetails() {
-            response = given()
-                .contentType("application/x-www-form-urlencoded")
-                .formParams("email", items.get("email"), "password", items.get("password"))
-                .post(Routes.postLoginDetails_url);
+            postResponse(Routes.postLoginDetails_url, items.get("email"), items.get("password"));
             System.out.println(response.getBody().asString());
         }
 
@@ -109,11 +156,7 @@ public class CreateDeleteAccount {
         @Test
         @DisplayName("Login with Invalid Details")
         void loginWithInvalidDetails() {
-            response = given()
-                .contentType("application/x-www-form-urlencoded")
-                .formParams("email", items.get("email") + "io", "password",
-                    items.get("password") + "000")
-                .post(Routes.postLoginDetails_url);
+            postResponse(Routes.postLoginDetails_url, items.get("email") + "84985", items.get("password") + "999985");
             System.out.println(response.getBody().asString());
         }
 
@@ -135,10 +178,7 @@ public class CreateDeleteAccount {
         @Test
         @DisplayName("Login without Email")
         void loginWithoutEmail() {
-            response = given()
-                .contentType("application/x-www-form-urlencoded")
-                .formParams("password", items.get("password"))
-                .post(Routes.postLoginDetails_url);
+            postResponse(Routes.postLoginDetails_url, items.get("password"));
             System.out.println(response.getBody().asString());
         }
 
@@ -161,10 +201,7 @@ public class CreateDeleteAccount {
         @Test
         @DisplayName("Get user account detail by email")
         void testGetUserDetailsByEmail() {
-            response = given()
-                .contentType("application/x-www-form-urlencoded")
-                .formParams("email", items.get("email"))
-                .get(Routes.getUserAccountByEmail_url);
+            getResponse(Routes.getUserAccountByEmail_url, items.get("email"));
 
         }
     }

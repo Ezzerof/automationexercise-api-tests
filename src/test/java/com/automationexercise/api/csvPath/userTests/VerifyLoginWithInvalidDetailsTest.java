@@ -1,4 +1,4 @@
-package com.automationexercise.api.tests.userTests;
+package com.automationexercise.api.csvPath.userTests;
 
 import com.automationexercise.api.endpoints.Routes;
 import io.restassured.response.Response;
@@ -12,15 +12,15 @@ import static org.hamcrest.Matchers.equalTo;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class VerifyLoginWithValidDetailsTest {
+public class VerifyLoginWithInvalidDetailsTest {
 
     static Response response;
 
     @Order(1)
     @TestTemplate
-    @DisplayName("Verify user account")
+    @DisplayName("Verify user account with invalid details")
     @ParameterizedTest(name = "{index} - Name: {0}")
-    @CsvFileSource(files = "src\\test\\resources\\VerifyLogin.csv", numLinesToSkip = 1)
+    @CsvFileSource(files = "src\\test\\resources\\WrongUsername.csv", numLinesToSkip = 1)
     public void init(String email, String password) {
         response = given()
                 .contentType("application/x-www-form-urlencoded")
@@ -30,15 +30,16 @@ public class VerifyLoginWithValidDetailsTest {
 
     @Order(2)
     @Test
+    @DisplayName("Test response message should be User not found!")
     public void testVerifyLoginWithValidDetails() {
-        assertThat(response.jsonPath().getString("message"), equalTo("User exists!"));
+        assertThat(response.jsonPath().getString("message"), equalTo("User not found!"));
     }
 
     @Order(3)
     @Test
-    @DisplayName("Test response code should be 200")
-    void testResultCodeShouldBe200() {
-        assertThat(response.jsonPath().getString("responseCode"), equalTo("200"));
+    @DisplayName("Test response code should be 404")
+    void testResultCodeShouldBe404() {
+        assertThat(response.jsonPath().getString("responseCode"), equalTo("404"));
     }
 
     @Order(4)
@@ -48,6 +49,5 @@ public class VerifyLoginWithValidDetailsTest {
         assertThat(response.getStatusCode(), equalTo(200));
 
     }
-
 
 }

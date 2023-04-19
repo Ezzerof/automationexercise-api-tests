@@ -1,4 +1,4 @@
-package com.automationexercise.api.tests2;
+package com.automationexercise.api.jsonPath;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;

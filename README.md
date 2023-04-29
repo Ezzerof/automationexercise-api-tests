@@ -1,4 +1,4 @@
-# MiniAutomatedAPITestingProject
+# Mini Automated API Testing Project
 
 ## Goal
 The goal of this project is to test the API of the website https://automationexercise.com/ by creating a fully functional API test framework using Rest Assured.

@@ -1,12 +1,13 @@
 package com.automationexercise.api.csv_path.products_list_tests;
 
-import com.automationexercise.api.endpoints.Routes;
+import com.automationexercise.api.config.Config;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.*;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class PostProductListTest {
 
@@ -18,29 +19,28 @@ public class PostProductListTest {
     public void init() {
         response = given()
                 .contentType("application/x-www-form-urlencoded")
-                .post(Routes.postProducts_url);
+                .post(Config.BASE_URL + Config.PRODUCTS_ENDPOINT);
 
     }
 
     @Test
     @Order(2)
-    @DisplayName("Test response message should be method not supported")
+    @DisplayName("Validate response message: Method not supported")
     void testResponseMessageShouldBeAccountDeleted() {
-        assertThat(response.jsonPath().getString("message"), equalTo("This request method is not supported."));
+        assertThat(response.jsonPath().getString("message"), equalTo(Config.EXPECTED_METHOD_NOT_SUPPORTED_MESSAGE));
     }
 
     @Test
     @Order(3)
-    @DisplayName("Test response code should be 405")
+    @DisplayName("Validate response code: 405")
     void testResponseCodeShouldBe405() {
-        assertThat(response.jsonPath().getString("responseCode"), equalTo("405"));
+        assertThat(response.jsonPath().getString("responseCode"), equalTo(Config.EXPECTED_RESPONSE_CODE_405));
     }
 
     @Test
     @Order(4)
-    @DisplayName("Test status code should be 200")
+    @DisplayName("Validate status code: 200")
     void testStatusCodeShouldBe200() {
-        assertThat(response.getStatusCode(), equalTo(200));
+        assertThat(response.getStatusCode(), equalTo(Config.EXPECTED_STATUS_CODE));
     }
-
 }

@@ -21,17 +21,17 @@ public class CreateDeleteAccount {
 
   static Response postResponse(Map<String, String> map, String url) {
     response = given()
-        .contentType("application/x-www-form-urlencoded")
-        .formParams(map)
-        .post(url);
+            .contentType("application/x-www-form-urlencoded")
+            .formParams(map)
+            .post(url);
     return response;
   }
 
   static Response postResponse(Map<String, String> map, String url, String key1, String key2) {
     response = given()
-        .contentType("application/x-www-form-urlencoded")
-        .formParams(key1, map.get(key1), key2, map.get(key2))
-        .post(url);
+            .contentType("application/x-www-form-urlencoded")
+            .formParams(key1, map.get(key1), key2, map.get(key2))
+            .post(url);
     // System.out.println(response.getBody().asString());
     return response;
   }
@@ -39,9 +39,9 @@ public class CreateDeleteAccount {
   static Response postResponse(Map<String, String> map, String url, String key1, String key2,
                                String faultValue) {
     response = given()
-        .contentType("application/x-www-form-urlencoded")
-        .formParams(key1, map.get(key1) + faultValue, key2, map.get(key2) + faultValue)
-        .post(url);
+            .contentType("application/x-www-form-urlencoded")
+            .formParams(key1, map.get(key1) + faultValue, key2, map.get(key2) + faultValue)
+            .post(url);
     // System.out.println(response.getBody().asString());
     return response;
   }
@@ -49,35 +49,35 @@ public class CreateDeleteAccount {
 
   static Response postResponse(Map<String, String> map, String url, String key) {
     response = given()
-        .contentType("application/x-www-form-urlencoded")
-        .formParams(key, map.get(key))
-        .post(url);
+            .contentType("application/x-www-form-urlencoded")
+            .formParams(key, map.get(key))
+            .post(url);
     //System.out.println(response.getBody().asString());
     return response;
   }
 
   static Response getResponse(Map<String, String> map, String url, String key) {
     response = given()
-        .contentType("application/x-www-form-urlencoded")
-        .formParams(key, map.get(key))
-        .get(url);
+            .contentType("application/x-www-form-urlencoded")
+            .formParams(key, map.get(key))
+            .get(url);
 
     return response;
   }
 
   static Response putResponse(Map<String, String> map, String url) {
     response = given()
-        .contentType("application/x-www-form-urlencoded")
-        .formParams(map)
-        .put(url);
+            .contentType("application/x-www-form-urlencoded")
+            .formParams(map)
+            .put(url);
     return response;
   }
 
   static Response deleteResponse(Map<String, String> map, String url, String key, String key2) {
     response = given()
-        .contentType("application/x-www-form-urlencoded")
-        .formParams(key, map.get(key), key2, map.get(key2))
-        .delete(url);
+            .contentType("application/x-www-form-urlencoded")
+            .formParams(key, map.get(key), key2, map.get(key2))
+            .delete(url);
     //System.out.println(response.getBody().asString());
 
     return response;
@@ -86,58 +86,58 @@ public class CreateDeleteAccount {
 
   static void getResponse(String url, String email) {
     response = given()
-        .contentType("application/x-www-form-urlencoded")
-        .formParams("email", email)
-        .get(url)
-        .then()
-        .extract().response();
+            .contentType("application/x-www-form-urlencoded")
+            .formParams("email", email)
+            .get(url)
+            .then()
+            .extract().response();
   }
 
   static void postResponse(String url) {
     response = given()
-        .contentType("application/x-www-form-urlencoded")
-        .when()
-        .post(url)
-        .then()
-        .extract().response();
+            .contentType("application/x-www-form-urlencoded")
+            .when()
+            .post(url)
+            .then()
+            .extract().response();
   }
 
   static void postResponse(String url, Map<String, String> item) {
     response = given()
-        .contentType("application/x-www-form-urlencoded")
-        .formParams(item)
-        .when()
-        .post(url)
-        .then()
-        .extract().response();
+            .contentType("application/x-www-form-urlencoded")
+            .formParams(item)
+            .when()
+            .post(url)
+            .then()
+            .extract().response();
   }
 
   static void postResponse(String url, String password) {
     response = given()
-        .contentType("application/x-www-form-urlencoded")
-        .formParams("password", password)
-        .when()
-        .post(url)
-        .then()
-        .extract().response();
+            .contentType("application/x-www-form-urlencoded")
+            .formParams("password", password)
+            .when()
+            .post(url)
+            .then()
+            .extract().response();
   }
 
   static void postResponse(String url, String email, String password) {
     response = given()
-        .contentType("application/x-www-form-urlencoded")
-        .formParams("email", email, "password", password)
-        .post(url)
-        .then()
-        .extract().response();
+            .contentType("application/x-www-form-urlencoded")
+            .formParams("email", email, "password", password)
+            .post(url)
+            .then()
+            .extract().response();
   }
 
   static void putResponse(String url, Map<String, String> updatedItems) {
     response = given()
-        .contentType("application/x-www-form-urlencoded")
-        .formParams(updatedItems)
-        .put(url)
-        .then()
-        .extract().response();
+            .contentType("application/x-www-form-urlencoded")
+            .formParams(updatedItems)
+            .put(url)
+            .then()
+            .extract().response();
   }
 
   @BeforeAll
@@ -145,7 +145,6 @@ public class CreateDeleteAccount {
     items = JsonParser.createMap("src\\test\\resources\\user.json");
     deleteResponse(items, Routes.deleteUserAccount_url, "email", "password");
   }
-
 
 
   @Order(1)
@@ -270,7 +269,7 @@ public class CreateDeleteAccount {
 //            System.out.println(response.getBody().asString());
 
       postResponse(Routes.postLoginDetails_url, items.get("email") + "84985",
-          items.get("password") + "999985");
+              items.get("password") + "999985");
       System.out.println(response.getBody().asString());
 
     }
@@ -312,7 +311,7 @@ public class CreateDeleteAccount {
     @DisplayName("Test Login without email response message")
     void testLoginWithoutEmailResponseMessage() {
       assertThat(response.jsonPath().getString("message"),
-          equalTo("Bad request, email or password parameter is missing in POST request."));
+              equalTo("Bad request, email or password parameter is missing in POST request."));
     }
 
     @Order(16)
@@ -377,7 +376,7 @@ public class CreateDeleteAccount {
     @DisplayName("Test User birth month")
     void testUserBirthMonth() {
       assertThat(response.jsonPath().getString("user.birth_month"),
-          equalTo(items.get("birth_month")));
+              equalTo(items.get("birth_month")));
     }
 
     @Order(5)
@@ -385,7 +384,7 @@ public class CreateDeleteAccount {
     @DisplayName("Test User birth year")
     void testUserBirthYear() {
       assertThat(response.jsonPath().getString("user.birth_year"),
-          equalTo(items.get("birth_year")));
+              equalTo(items.get("birth_year")));
     }
 
     @Order(6)
@@ -485,3 +484,4 @@ public class CreateDeleteAccount {
       assertThat(response.jsonPath().getString("responseCode"), equalTo("200"));
     }
   }
+}

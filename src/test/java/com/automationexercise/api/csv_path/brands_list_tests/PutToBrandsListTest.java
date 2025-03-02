@@ -1,5 +1,6 @@
 package com.automationexercise.api.csv_path.brands_list_tests;
 
+import com.automationexercise.api.config.Config;
 import com.automationexercise.api.endpoints.Routes;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.*;
@@ -15,12 +16,12 @@ public class PutToBrandsListTest {
 
     @Test
     @Order(1)
-    @DisplayName("Putting to brands list")
-    public void init() {
+    @DisplayName("Sending PUT request to brands list")
+    void sendPutRequestToBrandsList() {
         response = given()
                 .contentType("application/x-www-form-urlencoded")
                 .when()
-                .put(Routes.putBrands_url)
+                .put(Config.BASE_URL + Config.BRANDS_ENDPOINT)
                 .then()
                 .extract().response();
         System.out.println(response.getBody().asString());
@@ -29,23 +30,26 @@ public class PutToBrandsListTest {
 
     @Test
     @Order(2)
-    @DisplayName("Test response message should be method not supported")
-    void testResponseMessageShouldBeNotSupported() {
-        assertThat(response.jsonPath().getString("message"), equalTo("This request method is not supported."));
+    @DisplayName("Validate response message: Method not supported")
+    void validateResponseMessage() {
+        assertThat("Expected 'method not supported' message!",
+                response.jsonPath().getString("message"), equalTo(Config.EXPECTED_METHOD_NOT_SUPPORTED_MESSAGE));
     }
 
     @Test
     @Order(3)
-    @DisplayName("Test response code should be 405")
-    void testResponseCodeShouldBe405() {
-        assertThat(response.jsonPath().getString("responseCode"), equalTo("405"));
+    @DisplayName("Validate response code: 405")
+    void validateResponseCode() {
+        assertThat("Expected response code 405!",
+                response.jsonPath().getString("responseCode"), equalTo(Config.EXPECTED_RESPONSE_CODE_405));
     }
 
     @Test
     @Order(4)
-    @DisplayName("Test status code should be 200")
-    void testStatusCodeShouldBe200() {
-        assertThat(response.getStatusCode(), equalTo(200));
+    @DisplayName("Validate HTTP status code: 200")
+    void validateStatusCode() {
+        assertThat("Expected HTTP status code 200!",
+                response.getStatusCode(), equalTo(Config.EXPECTED_STATUS_CODE));
     }
 
 }

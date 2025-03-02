@@ -1,6 +1,6 @@
 package com.automationexercise.api.csv_path.brands_list_tests;
 
-import com.automationexercise.api.endpoints.Routes;
+import com.automationexercise.api.config.Config;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -15,18 +15,13 @@ import static org.hamcrest.Matchers.equalTo;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class BrandsListTest {
 
-    public final static int expectedStatusCode = 200; // Entered by tester
-    public final static int sizeOfTheList = 34; // Entered by tester
-    public final static String serverName = "cloudflare"; // Entered by tester
-    final static String contentType = "Content-Type=text/html; charset=utf-8";
-    static Response response;
-    static int actualStatusCode = 0;
+    private static Response response;
 
     @BeforeAll
-    static void init() {
+    static void setup() {
         response = given()
                 .when()
-                .get(Routes.getBrands_url)
+                .get(Config.BASE_URL + Config.BRANDS_ENDPOINT)
                 .then()
                 .extract().response();
     }
@@ -34,40 +29,35 @@ public class BrandsListTest {
     @TestTemplate
     @DisplayName("Testing brand list")
     @ParameterizedTest(name = "{index} - Brand id: {0}")
-    @CsvFileSource(files = "src\\test\\resources\\AllBrands.csv", numLinesToSkip = 1)
+    @CsvFileSource(files = Config.BRANDS_CSV_PATH, numLinesToSkip = 1)
     public void testBrandsList(String id, String brand) {
 
-        //try {
         assertThat(response.jsonPath().getString("brands.find { it.id == " + id + "}.id"), equalTo(id));
         assertThat(response.jsonPath().getString("brands.find { it.id == " + id + "}.brand"), equalTo(brand));
-//        } catch (AssertionError e) {
-//            System.out.println("AssertionError: " + e.getMessage());
-//        }
     }
 
     @Test
-    @DisplayName("Test Status Code: " + expectedStatusCode)
+    @DisplayName("Test Status Code: " + Config.EXPECTED_STATUS_CODE)
     void testStatusCode() {
-        actualStatusCode = response.getStatusCode();
-        assertThat(actualStatusCode, equalTo(expectedStatusCode));
+        assertThat("Status code mismatch!", response.getStatusCode(), equalTo(Config.EXPECTED_STATUS_CODE));
     }
 
     @Test
-    @DisplayName("Check size of the list should be: " + sizeOfTheList)
-    void checkSizeOfTheList() {
-        List<String> productNames = response.jsonPath().getList("brands.id");
-        assertThat(productNames.size(), equalTo(sizeOfTheList));
+    @DisplayName("Check size of the list should be: " + Config.EXPECTED_LIST_SIZE)
+    void testListSize() {
+        List<String> brandIds = response.jsonPath().getList("brands.id");
+        assertThat("List size mismatch!", brandIds.size(), equalTo(Config.EXPECTED_LIST_SIZE));
     }
 
     @Test
-    @DisplayName("Check the server name: " + serverName)
-    void checkTheServerName() {
-        assertThat(response.getHeaders().get("server").toString(), equalTo("Server=" + serverName));
+    @DisplayName("Check the server name: " + Config.EXPECTED_SERVER_NAME)
+    void testServerName() {
+        assertThat("Server name mismatch!", response.header("server"), equalTo(Config.EXPECTED_SERVER_NAME));
     }
 
     @Test
     @DisplayName("Test the content-type")
-    void testTheContentType() {
-        assertThat(response.getHeaders().get("content-type").toString(), equalTo(contentType));
+    void testContentType() {
+        assertThat("Content-Type mismatch!", response.header("content-type"), equalTo(Config.EXPECTED_CONTENT_TYPE));
     }
 }

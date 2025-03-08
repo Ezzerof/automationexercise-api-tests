@@ -1,0 +1,4 @@
+﻿Name,Email,Password,Title,Birth day,Birth month,Birth year,Firstname,Lastname,Company,Address 1,Address 2,Country,Zipcode,State,City,Mobile number
+createTest,KATIE@GMAIL.COM,123456789,Mrs,9,10,1996,Katie,Hulme,Sparta,in Uk 23,,Uk,19868,aa,London,89798416
+createTest,katie+test@gmail.com,123456789,Miss,1,1,2000,Katie,Smith,Sparta,123 Some Street,,Uk,12345,bb,Manchester,5551234
+createTest,katie@gmail.com,123456789,Mrs,9,10,1996,Katie,Hulme,Sparta,in Uk 23,,Uk,19868,aa,London,89798416
